@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Document</title>
+		<style>
+			#content {
+				position: relative;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div>
+			<button onclick="canvas.pen()">画笔</button>
+			<button onclick="canvas.rect()">矩形</button>
+		</div>
+		<div id="content"></div>
+	</body>
+	<script>
+		const content = document.getElementById('content');
+
+		const canvas = createCanvas(content, {
+			width: 600,
+			height: 600
+		});
+
+		function createTempCanvas(ele, option, callback) {
+			const canvas = document.createElement('canvas');
+			const ctx = canvas.getContext('2d');
+			let size = 1;
+			let rectProxy = null;
+			const { width, height } = option;
+			canvas.width = width;
+			canvas.height = height;
+			canvas.style.position = 'absolute';
+			canvas.style.backgroundColor = 'rgba(255,255,255,0.2)';
+			canvas.style.top = 0;
+			canvas.style.left = 0;
+
+			rectTempHandle(canvas, ctx, size, (rectProxy) => {
+				canvas.remove();
+				callback(rectProxy);
+			});
+			ele.appendChild(canvas);
+		}
+
+		function createCanvas(ele, option) {
+			const canvas = document.createElement('canvas');
+			const ctx = canvas.getContext('2d');
+			let size = 1;
+
+			const { width, height } = option;
+			canvas.width = width;
+			canvas.height = height;
+			canvas.style.border = '1px solid gray';
+
+			const pen = () => penHandle(canvas, ctx, size);
+			const rect = () => {
+				createTempCanvas(
+					ele,
+					{
+						width: 600,
+						height: 600
+					},
+					(rectProxy) => {
+						rectHandle(canvas, ctx, size, rectProxy);
+					}
+				);
+			};
+
+			ele.appendChild(canvas);
+			return {
+				pen,
+				rect
+			};
+		}
+
+		// 画笔
+		function penHandle(canvas, ctx, size) {
+			canvas.onmousedown = function (e) {
+				canvas.onmouseup = function () {
+					canvas.onmousemove = null;
+				};
+				ctx.beginPath();
+				ctx.lineWidth = size;
+				ctx.moveTo(e.offsetX, e.offsetY);
+				canvas.onmousemove = function (e) {
+					ctx.lineTo(e.offsetX, e.offsetY);
+					ctx.stroke();
+				};
+			};
+		}
+
+		function rectHandle(canvas, ctx, size, position) {
+			const { sizeX, sizeY, startX, startY } = position;
+			ctx.setLineDash([]);
+			ctx.strokeRect(startX, startY, sizeX, sizeY);
+		}
+
+		// temp矩形
+		function rectTempHandle(canvas, ctx, size, callback) {
+			const maxWidth = canvas.width;
+			const maxHeight = canvas.height;
+			const rectObj = {};
+			let flag = true;
+			const rectProxy = new Proxy(rectObj, {
+				set(target, key, value) {
+					target[key] = value;
+					if (flag) {
+						Promise.resolve().then(() => {
+							callback(rectProxy);
+						});
+					}
+					flag = false;
+				}
+			});
+
+			canvas.onmousedown = function (e) {
+				let moveX = 0;
+				let moveY = 0;
+				flag = true;
+				canvas.onmouseup = function () {
+					ctx.clearRect(0, 0, maxWidth, maxHeight);
+					ctx.setLineDash([]);
+					canvas.onmousemove = null;
+					ctx.strokeRect(startX, startY, moveX - startX, moveY - startY);
+
+					rectProxy['startX'] = startX;
+					rectProxy['startY'] = startY;
+					rectProxy['sizeX'] = moveX - startX;
+					rectProxy['sizeY'] = moveY - startY;
+				};
+				ctx.lineWidth = size;
+				ctx.setLineDash([10, 10]);
+				const startX = e.offsetX;
+				const startY = e.offsetY;
+
+				canvas.onmousemove = function (e) {
+					moveX = e.offsetX;
+					moveY = e.offsetY;
+					ctx.clearRect(0, 0, maxWidth, maxHeight);
+					ctx.strokeRect(startX, startY, moveX - startX, moveY - startY);
+				};
+			};
+			return rectProxy;
+		}
+	</script>
+</html>

@@ -1,34 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Document</title>
+		<style>
+			#content {
+				position: relative;
+			}
+		</style>
+	</head>
 
-<head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-    <style>
-        #content {
-            position: relative;
-        }
-    </style>
-</head>
-
-<body>
-    <div>
-        <button onclick="pea.pen()">画笔</button>
-        <button onclick="pea.rect()">矩形</button>
-        <button onclick="pea.clearAll()">清除</button>
-        <button onclick="pea.circle()">圆</button>
-        <button onclick="pea.exportImg()">导出</button>
-        <button onclick="pea.importImg()">导入图片</button>
-        <button onclick="pea.show()">show</button>
-        <button onclick="pea.render()">render</button>
-    </div>
-    <div id="content"></div>
-</body>
-<!-- <script type="module" crossorigin src="./dist/bundle.js"></script> -->
-<script type="module">
-    import { createCanvas } from "./dist/bundle.js"; const content = document.getElementById("content"); const pea = createCanvas(content, { width: 600, height: 600 }); window.pea = pea; console.log(pea);
-</script>
-
+	<body>
+		<div>
+			<button onclick="pea.pen()">画笔</button>
+			<button onclick="pea.rect()">矩形</button>
+			<button onclick="pea.clearAll()">清除</button>
+			<button onclick="pea.circle()">圆</button>
+			<button onclick="pea.exportImg()">导出</button>
+			<button onclick="pea.importImg()">导入图片</button>
+			<button onclick="pea.show()">show</button>
+			<button onclick="pea.render()">render</button>
+		</div>
+		<div id="content"></div>
+	</body>
+	<!-- <script type="module" crossorigin src="./dist/bundle.js"></script> -->
+	<script type="module">
+		import { createCanvas } from './dist/bundle.js';
+		const content = document.getElementById('content');
+		const pea = createCanvas(content, { width: 600, height: 600 });
+		window.pea = pea;
+		console.log(pea);
+	</script>
 </html>

@@ -1,47 +1,39 @@
 export default class Circle {
-    type = "circle";
-    startX = 0;
-    startY = 0;
-    sizeX = 0;
-    sizeY = 0;
-    isControl = true;
+	type = 'circle';
+	startX = 0;
+	startY = 0;
+	sizeX = 0;
+	sizeY = 0;
+	isControl = true;
 
-    constructor(startX, startY, sizeX, sizeY) {
-        this.startX = startX;
-        this.startY = startY;
-        this.sizeX = sizeX;
-        this.sizeY = sizeY;
-    }
+	constructor(startX, startY, sizeX, sizeY) {
+		if (sizeX <= 0) {
+			this.startX = startX + sizeX;
+			this.sizeX = -sizeX;
+		} else {
+			this.sizeX = sizeX;
+			this.startX = startX;
+		}
+		if (sizeY <= 0) {
+			this.startY = startY + sizeY;
+			this.sizeY = -sizeY;
+		} else {
+			this.startY = startY;
+			this.sizeY = sizeY;
+		}
+	}
 
-    // isChoice(mousePoint) {
-    //     let flag = false;
-    //     const { x, y } = mousePoint;
-    //     const cStartX = this.startX - this.sizeX;
-    //     const cStartY = this.startY - this.sizeY;
-
-    //     if (
-    //         x >= cStartX &&
-    //         x <= cStartX + 2 * this.sizeX &&
-    //         y >= cStartY &&
-    //         y <= cStartY + 2 * this.sizeY
-    //     ) {
-    //         flag = true;
-    //     }
-    //     return flag;
-    // }
-
-    isChoice(mousePoint) {
-        console.log(this.startX);
-        let flag = false;
-        const { x, y } = mousePoint;
-        if (
-            x >= this.startX &&
-            x <= this.startX + this.sizeX &&
-            y >= this.startY &&
-            y <= this.startY + this.sizeY
-        ) {
-            flag = true;
-        }
-        return flag;
-    }
+	isChoice(mousePoint) {
+		let flag = false;
+		const { x, y } = mousePoint;
+		if (
+			x >= this.startX &&
+			x <= this.startX + this.sizeX &&
+			y >= this.startY &&
+			y <= this.startY + this.sizeY
+		) {
+			flag = true;
+		}
+		return flag;
+	}
 }

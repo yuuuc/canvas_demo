@@ -4,6 +4,7 @@ export default function circleHandle(ctx, position) {
     const halfSY = Math.round(sizeY / 2.0);
     ctx.beginPath();
     ctx.setLineDash([]);
+    ctx.lineWidth = 2;
     ctx.strokeStyle = "black";
     ctx.ellipse(
         startX + halfSX,
@@ -15,6 +16,8 @@ export default function circleHandle(ctx, position) {
         Math.PI * 2
     );
     ctx.stroke();
+
+    ctx.closePath();
 
     // console.log(position);
     // ctx.ellipse(0, 0, 300, 200, 300, 300, Math.PI * 2);

@@ -2,6 +2,7 @@
 export function penHandle(canvas, ctx, size, callback) {
     canvas.onmousedown = function(e) {
         canvas.onmouseup = function() {
+            ctx.closePath();
             canvas.onmousedown = null;
             canvas.onmousemove = null;
 
@@ -20,6 +21,9 @@ export function penHandle(canvas, ctx, size, callback) {
 }
 
 export function penRender(ctx, pen) {
+    ctx.setLineDash([]);
+    ctx.lineWidth = 1;
+    ctx.strokeStyle = "black";
     ctx.lineTo(pen.x, pen.y);
     ctx.stroke();
 }

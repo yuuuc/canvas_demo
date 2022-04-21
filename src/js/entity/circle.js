@@ -1,40 +1,31 @@
-export default class Circle {
+import RectAndCircle from "./rectAndCircle";
+
+export default class Circle extends RectAndCircle {
     type = "circle";
-    startX = 0;
-    startY = 0;
-    sizeX = 0;
-    sizeY = 0;
-    isControl = true;
 
     constructor(startX, startY, sizeX, sizeY) {
-        if (sizeX <= 0) {
-            this.startX = startX + sizeX;
-            this.sizeX = -sizeX;
-        } else {
-            this.sizeX = sizeX;
-            this.startX = startX;
-        }
-        if (sizeY <= 0) {
-            this.startY = startY + sizeY;
-            this.sizeY = -sizeY;
-        } else {
-            this.startY = startY;
-            this.sizeY = sizeY;
-        }
+        super(startX, startY, sizeX, sizeY);
     }
 
-    isChoice(mousePoint) {
-        console.log(mousePoint);
-        let flag = false;
-        const { x, y } = mousePoint;
-        if (
-            x >= this.startX &&
-            x <= this.startX + this.sizeX &&
-            y >= this.startY &&
-            y <= this.startY + this.sizeY
-        ) {
-            flag = true;
-        }
-        return flag;
+    render(ctx) {
+        this._init(ctx);
+
+        const halfSX = Math.round(this.sizeX / 2.0);
+        const halfSY = Math.round(this.sizeY / 2.0);
+        ctx.beginPath();
+        ctx.setLineDash(this.lineDash);
+        ctx.lineWidth = this.lineWidth;
+        ctx.strokeStyle = this.strokeStyle;
+        ctx.ellipse(
+            this.startX + halfSX,
+            this.startY + halfSY,
+            halfSX,
+            halfSY,
+            0,
+            0,
+            Math.PI * 2
+        );
+        ctx.stroke();
+        ctx.closePath();
     }
 }

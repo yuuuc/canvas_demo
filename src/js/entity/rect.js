@@ -1,38 +1,20 @@
-export default class Rect {
-	type = 'rect';
-	startX = 0;
-	startY = 0;
-	sizeX = 0;
-	sizeY = 0;
-	isControl = true;
-	constructor(startX, startY, sizeX, sizeY) {
-		if (sizeX <= 0) {
-			this.startX = startX + sizeX;
-			this.sizeX = -sizeX;
-		} else {
-			this.sizeX = sizeX;
-			this.startX = startX;
-		}
-		if (sizeY <= 0) {
-			this.startY = startY + sizeY;
-			this.sizeY = -sizeY;
-		} else {
-			this.startY = startY;
-			this.sizeY = sizeY;
-		}
-	}
+import RectAndCircle from "./rectAndCircle";
 
-	isChoice(mousePoint) {
-		let flag = false;
-		const { x, y } = mousePoint;
-		if (
-			x >= this.startX &&
-			x <= this.startX + this.sizeX &&
-			y >= this.startY &&
-			y <= this.startY + this.sizeY
-		) {
-			flag = true;
-		}
-		return flag;
-	}
+export default class Rect extends RectAndCircle {
+    type = "rect";
+
+    constructor(startX, startY, sizeX, sizeY) {
+        super(startX, startY, sizeX, sizeY);
+    }
+
+    render(ctx) {
+        this._init(ctx);
+
+        ctx.lineWidth = this.lineWidth;
+        ctx.strokeStyle = this.strokeStyle;
+        ctx.setLineDash(this.lineDash);
+        ctx.beginPath();
+        ctx.strokeRect(this.startX, this.startY, this.sizeX, this.sizeY);
+        ctx.closePath();
+    }
 }
